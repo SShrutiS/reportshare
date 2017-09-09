@@ -1,0 +1,390 @@
+#basic methods
+
+#index 
+  def index
+    @users = User.order(id: 'asc')
+  end
+
+    def index
+        @course = Course.find(params[:course_id])
+        @syllabus = Syllabus.new
+        @syllabuses = Syllabus.where(course_id: @course.id)
+        
+        #binding.pry
+        
+    end
+
+#new
+
+    def new
+    @courses = Course.all
+    @teachers = User.where(role: 'teacher')
+    @semesters = ['Spring', 'Fall']
+    @registration = Registration.new
+    end
+      
+
+#create 
+
+      def create
+        @registration = Registration.new(params[:registration].permit(:course_id, :teacher_id, :semester, :year, :capacity))
+        if @registration.save
+          redirect_to registrations_path
+        else
+          @courses = Course.all
+          @teachers = User.where(role: 'teacher')
+          @semesters = ['Spring', 'Fall']
+          render 'new'
+        end
+      end
+      
+  
+#update method
+
+ def update_role
+    user = User.where(email: params[:email]).first
+    if !user
+      @roles = ['teacher', 'student']
+      @error = 'user does not exist'
+      render 'edit_role'
+    else
+      user.update(role: params[:role])
+      redirect_to users_path
+    end
+  end
+  
+  
+  
+
+regular controller sample
+
+class CruisesController < ApplicationController
+  before_action :auth_admin
+
+  def index
+    user_id = @user.id
+    @cruises = Cruise.all
+  end
+
+  def new
+    @cruise = Cruise.new
+    @ships = Ship.all
+  end
+
+  def create
+    @cruise = Cruise.new(params[:cruise].permit(:name, :duration, :base_cost, :ship_id))
+    @cruise.dates = params[:cruise][:dates].split(',').map(&:to_date)
+
+    if @cruise.save
+      redirect_to cruises_path
+    else
+      @ships = Ship.all
+      render 'new'
+    end
+  end
+
+  def destroy
+    cruise = Cruise.find(params[:id])
+    cruise.destroy
+    redirect_to cruises_path
+  end
+
+  def show
+    @cruise = Cruise.find(params[:id])
+    @cities = City.all
+  end
+
+  def add_date
+    cruise = Cruise.find(params[:id])
+    date = Date.new(params['date(1i)'].to_i, params['date(2i)'].to_i, params['date(3i)'].to_i)
+    cruise.dates << date
+    cruise.save
+    redirect_to cruise
+  end
+
+  def add_city
+    cruise = Cruise.find(params[:id])
+    city = City.find(params[:city_id])
+    cruise.cities << city ## model pushes the data into DB automatically. no need save
+    redirect_to cruise
+  end
+end
+
+class RegistrationsController < ApplicationController
+    # def index
+    #     @registrations =  Registration.all
+    # end
+    
+    # def new
+        
+    #   @registration =  Registration.new
+    #   @courses = Course.all
+    #   @teachers =  User.where(role: 'teacher')
+    #   @semesters = ['Fall', 'Spring', 'Summer']
+    # end
+    
+
+ 
+    # def create
+    #     @registration  = Registration.new(params[:registration].permit(:course_id, :user_id, :semester, :year, :capacity))
+        
+    #     if @registration.save
+    #       redirect_to registrations_path
+    #     else
+    #       render 'new'
+    #     end 
+    # end
+
+    before_action :auth_teacher
+    
+      def index
+        @registrations = Registration.all.order(id: 'asc')
+      end
+    
+      def new
+        @courses = Course.all
+        @teachers = User.where(role: 'teacher')
+        @semesters = ['Spring', 'Fall']
+        @registration = Registration.new
+      end
+    
+      def create
+        @registration = Registration.new(params[:registration].permit(:course_id, :teacher_id, :semester, :year, :capacity))
+        if @registration.save
+          redirect_to registrations_path
+        else
+          @courses = Course.all
+          @teachers = User.where(role: 'teacher')
+          @semesters = ['Spring', 'Fall']
+          render 'new'
+        end
+      end
+    
+      def toggle_open
+        r = Registration.find(params[:id])
+        r.update(is_open: !r.is_open)
+        redirect_to registrations_path
+      end
+      
+end
+
+#with file uploads
+
+class SyllabusesController < ApplicationController
+    before_action :auth_teacher
+    
+    
+    # def new
+    #     @course = Course.find(params[:course_id])
+    #     @syllabus = Syllabus.new
+    #   end
+      
+    def index
+        @course = Course.find(params[:course_id])
+        @syllabus = Syllabus.new
+        @syllabuses = Syllabus.where(course_id: @course.id)
+        
+        #binding.pry
+        
+    end
+    
+    def show
+    end
+    
+    def create
+     
+        #binding.pry
+        file = params[:syllabus][:file]
+        upload (file)
+        name = file.original_filename
+        azurepath = "#{SecureRandom.hex(64)}/#{name}"
+        url = "#{@host}/#{azurepath}"
+        @course = Course.find(params[:course_id])
+        @syllabus = Syllabus.new(params[:syllabus].permit(:title, :content, :url))
+        @syllabus.file = url
+        @syllabus.course = @course
+    
+        #binding.pry
+        
+        if @syllabus.save
+          redirect_to courses_url
+        else
+          render 'new'
+        end
+      end
+      
+    def upload (file)
+        f = file #params[:file]
+        orig = f.original_filename
+        secure = "#{Rails.root}/uploads/#{SecureRandom.hex(64)}"
+        FileUtils.cp f.path, secure
+        # upload file to azure blob storage
+        UploadSyllabusesJob.perform_later(orig, secure)
+       # redirect_to root_path
+
+    end      
+
+end
+
+
+  
+  
+#regular
+
+class CoursesController < ApplicationController
+    
+    # def index
+    #     @courses = Course.all
+    # end
+    
+    # def new
+    #     @course = Course.new
+    # end
+    
+    # def create
+    #     @course  = Course.new(params[:course].permit(:name, :subject, :level, :credits))
+    #     if @course.save
+    #       redirect_to courses_path
+    #     else
+    #       render 'new'
+    #     end 
+    # end
+    
+    
+    before_action :auth_teacher
+
+  def index
+    @courses = Course.all.order(id: 'asc')
+  end
+
+  def new
+    @course = Course.new
+  end
+
+  def create
+    @course = Course.new(params[:klass].permit(:name, :subject, :level, :credits))
+    if @course.save
+      redirect_to courses_path
+    else
+      render 'new'
+    end
+  end
+  
+  
+  def section_list
+    @course = Course.find(params[:id])
+    @section = Section.new
+  end
+
+  def section_create
+    course = Course.find(params[:id])
+    title = params[:section][:title]
+    content = params[:section][:content]
+    link = params[:section][:link]
+    file = params[:section][:file]
+    position = course.sections.size
+
+    if !file.blank?
+      orig = file.original_filename
+      token = SecureRandom.hex(64)
+      path = "#{Rails.root}/uploads/#{token}"
+      FileUtils.cp file.path, path
+      UploadSyllabusesJob.perform_later(course.id, title, content, link, orig, token, path, file.content_type, position)
+    else
+      Section.create!(course: course, title: title, content: content, link: link, position: position)
+    end
+
+    redirect_to sections_course_path(course)
+  end
+
+  def up
+    course = Course.find(params[:id])
+    section1 = Section.find(params[:section_id])
+    section2 = course.sections.where(position: section1.position - 1).first
+
+    if section1.position > 0
+      section1.update(position: section1.position - 1)
+      section2.update(position: section1.position + 1) if section2
+    end
+
+    redirect_to sections_course_path(course)
+  end
+
+  def down
+    course = Course.find(params[:id])
+    section1 = Section.find(params[:section_id])
+    section2 = course.sections.where(position: section1.position + 1).first
+
+    if section1.position < course.sections.size - 1
+      section1.update(position: section1.position + 1)
+      section2.update(position: section1.position - 1) if section2
+    end
+
+    redirect_to sections_course_path(course)
+  end
+  
+  
+  
+end
+
+
+
+
+#/**************************************************************************************/
+
+
+class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception
+  before_action :get_user , :log_auth
+    
+    
+  private
+  # in ruby the private methis cann be access by the deverievd class
+  #add authentication
+  
+  def get_user
+      @user = current_user
+      @is_logged_in = user_signed_in? #true fals
+      @is_student = @is_logged_in && @user.role =='student'
+      @is_teacher = @is_logged_in && @user.role =='teacher'
+      @host = 'https://railsclass.blob.core.windows.net/classuploads'
+  end
+  
+  
+  
+  
+  def log_auth
+    #binding.pry
+    #use 
+    #to_h --> to hash
+    data = {controller: controller_name, action: action_name, params:request.params.to_s, time: Time.now.to_s}
+    data = data.merge({uid: @user.id, email: @user.email, role: @user.role}) if @user
+    
+    #merge two hases
+    #ap data # ap - awesome print
+    #binding.pry
+    #HTTParty.post('http://localhost:8082/logs', {body: {log: data}})
+    PushLogsJob.perform_later(data)
+  end
+  
+  # def log_auth
+  #   data = {controller: controller_name, action: action_name, params: request.params.to_h, time: Time.now}
+  #   data = data.merge({uid: @user.id, email: @user.email, role: @user.role}) if @user
+  #   ap data
+  # end
+  
+  
+  def auth_teacher
+      redirect_to root_url if !@is_teacher
+      
+  end
+  
+  def auth_student
+      redirect_to root_url if !@is_student
+  end 
+end
+
+
+
+
+

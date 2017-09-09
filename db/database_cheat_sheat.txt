@@ -1,0 +1,63 @@
+
+to alter  or add a new colum
+
+    rails g migration add_color_to_users color:string  photo:string
+    rails g migration add_is_favorite_to_messages is_favorite:boolean
+    
+    
+    
+sampple table with foreign keys
+
+class CreateRegistrations < ActiveRecord::Migration[5.1]
+  def change
+  create_table :registrations do |t|
+      t.string :semester, null: false
+      t.integer :year, null: false
+      t.integer :capacity, null: false
+      t.boolean :is_open, default: false
+      t.belongs_to :course, index: true, null: false
+      t.bigint :teacher_id, index: true, null: false
+      t.timestamps
+    end
+
+    add_foreign_key :registrations, :courses
+    #other way of defining the foreign key. custom column
+    add_foreign_key :registrations, :users, column: :teacher_id, primary_key: :id
+    
+  end
+end
+
+junction table example
+
+class CreateCitiesCruises < ActiveRecord::Migration[5.1]
+    #junction table or joint table. 
+    #no primary key
+    #tables should be alphabetical
+    # id: false -- do not put primary key
+  def change
+    create_table :cities_cruises, id: false do |t|
+      t.belongs_to :city, index: true, null: false
+      t.belongs_to :cruise, index: true, null: false
+    end
+
+    add_foreign_key :cities_cruises, :cities
+    add_foreign_key :cities_cruises, :cruises
+  end
+end
+
+
+
+
+index samples
+
+ add_index :courses, [:name], unique: true
+  add_index :cities, [:name, :country], unique: true
+  
+  
+adding foreign keys
+
+   #other way of defining the foreign key. with a custom column
+    add_foreign_key :registrations, :users, column: :teacher_id, primary_key: :id
+    
+    add_foreign_key :registrations, :courses
+    

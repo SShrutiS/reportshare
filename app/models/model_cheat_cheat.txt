@@ -1,0 +1,43 @@
+class City < ApplicationRecord
+   has_and_belongs_to_many :cruises
+      validates :name , :country  , presence: true
+   validates :name , uniqueness: {scope: [:country]}
+   
+end
+
+
+
+
+class Cruise < ApplicationRecord
+    has_and_belongs_to_many :cities
+    belongs_to :ship
+    has_many :reservations
+    has_many :users, through: :reservations
+
+    
+    validates :name, presence: true
+    validates :name, uniqueness: true
+end
+
+
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+  has_many :reservations
+  has_many :cruises, through: :reservations
+  
+  #custom Fk column 
+  #has_many :registrations, foreign_key: :teacher_id, class_name: "Registration"
+end
+
+#using custom column "teacher_id" as foreign key
+class Registration < ApplicationRecord
+    #validates :user_id, uniqueness: {scope: [:course_id, :semester, :year]}
+    
+      validates :semester, :year, :capacity, :course_id, :teacher_id, presence: true
+      belongs_to :course
+      belongs_to :teacher, foreign_key: :teacher_id, class_name: "User"
+      
+end
