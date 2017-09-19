@@ -6,6 +6,8 @@ require "sidekiq/web"
 mount Sidekiq::Web => '/sidekiq'
 
   root to: "home#index"
+
+  resources :reports, only: [:index]
   
   #sample routes
   
