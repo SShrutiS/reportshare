@@ -15,3 +15,7 @@ class Article < ApplicationRecord
         state :rejected
     end
 end
+
+THIS NEEDS TO BE ADDED TO THE DATABASE SCHEMA
+
+    t.string :workflow_state
