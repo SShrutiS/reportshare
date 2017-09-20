@@ -14,17 +14,25 @@
 # Configure Using Gemfile
 # gem 'pg'
 #
-default: &default
-  adapter: postgresql
-  template: template0
-  encoding: unicode
+# default: &default
+#  template: template0
+ #adapter: postgresql
+#  encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  #pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  
 
 development:
-  <<: *default
-  database: _app_development
+  adapter: sqlserver
+  encoding: utf8
+  # <<: *default
+  # mode: dblib
+  host: 10.123.11.11
+  port: 1433
+  username: ETL_MOD
+  password: etl17mod
+  database: RailsTestDB
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -56,9 +64,9 @@ development:
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
-test:
-  <<: *default
-  database: _app_test
+# test:
+#   <<: *default
+#   database: _app_test
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -79,26 +87,10 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
-production:
-  <<: *default
-  database: _app_production
-  username: _app
-  password: <%= ENV['_APP_DATABASE_PASSWORD'] %>
 
-
-
-other_database:
-  development:
-    adapter: postgresql
-    database: database_name
-    user: username
-
-  test:
-    adapter: postgresql
-    database: database_name
-    user: username
-
-  production:
-    adapter: postgresql
-    database: database_name
-    user: username
+=======
+# production:
+#   <<: *default
+#   database: _app_production
+#   username: _app
+#   password: <%= ENV['_APP_DATABASE_PASSWORD'] %>

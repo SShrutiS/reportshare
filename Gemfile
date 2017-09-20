@@ -14,8 +14,13 @@ source 'https://rails-assets.org' do
 end
 gem 'jquery-rails'
 gem 'bootstrap', '~> 4.0.0.alpha6'
-			gem 'font-awesome-sass'
+gem 'font-awesome-sass'
 
+gem 'rubyzip', '< 1.0.0'
+gem 'faker'
+gem 'axlsx_rails'    
+gem 'tiny_tds'
+gem 'activerecord-sqlserver-adapter'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.3'
 # Use postgresql as the database for Active Record
@@ -35,6 +40,7 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+gem 'workflow', '~> 1.2'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -53,7 +59,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'rspec-rails'
   gem 'capybara'
-  gem 'selenium-webdriver'
+  # gem 'selenium-webdriver'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end

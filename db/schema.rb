@@ -10,10 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170908230646) do
+ActiveRecord::Schema.define(version: 20170919212836) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  create_table "SALES_TREND", id: false, force: :cascade do |t|
+    t.date "SLS_PROC_WRK_DT"
+    t.varchar "YR_MNTH", limit: 6
+    t.varchar "PROGRAM", limit: 15
+    t.char "COMPANY_CODE", limit: 4, null: false
+    t.decimal "WAC", precision: 38, scale: 2
+    t.decimal "SF", precision: 38, scale: 2
+    t.decimal "SSF", precision: 38, scale: 2
+    t.decimal "SDC", precision: 38, scale: 2
+    t.decimal "QTY", precision: 38, scale: 2
+    t.decimal "SALES", precision: 38, scale: 2
+    t.varchar "SOURCE", limit: 9, null: false
+  end
+
+  create_table "SALES_TXN", id: false, force: :cascade do |t|
+    t.decimal "sls_id", precision: 10, scale: 0, null: false
+    t.decimal "sls_id_seq_num", precision: 5, scale: 0, null: false
+    t.decimal "sls_qty", precision: 17, scale: 0
+    t.decimal "sls_amt", precision: 19, scale: 4
+  end
+
+  create_table "sales_summaries", force: :cascade do |t|
+    t.string "sls_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "sl_quarantines", force: :cascade do |t|
+    t.string "gcn", null: false
+    t.integer "year_month", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -24,8 +55,8 @@ ActiveRecord::Schema.define(version: 20170908230646) do
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.inet "current_sign_in_ip"
-    t.inet "last_sign_in_ip"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "role", default: "user"
