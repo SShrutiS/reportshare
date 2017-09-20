@@ -84,3 +84,21 @@ production:
   database: _app_production
   username: _app
   password: <%= ENV['_APP_DATABASE_PASSWORD'] %>
+
+
+
+other_database:
+  development:
+    adapter: postgresql
+    database: database_name
+    user: username
+
+  test:
+    adapter: postgresql
+    database: database_name
+    user: username
+
+  production:
+    adapter: postgresql
+    database: database_name
+    user: username
