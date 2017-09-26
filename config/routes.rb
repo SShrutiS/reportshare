@@ -8,6 +8,11 @@ mount Sidekiq::Web => '/sidekiq'
   root to: "home#index"
 
   resources :reports, only: [:index]
+
+  resources :all_reports 
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  root to: 'all_reports#index'
+  post '/create', to: 'all_reports#create'
   
   #sample routes
   

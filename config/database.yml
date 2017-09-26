@@ -88,7 +88,7 @@ development:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 
-=======
+
 # production:
 #   <<: *default
 #   database: _app_production

@@ -45,11 +45,12 @@ gem 'workflow', '~> 1.2'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'httparty'
+
 group :development, :test do
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'faker'
   gem 'annotate'
   gem 'railroady'
   gem 'launchy'
@@ -59,7 +60,11 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'rspec-rails'
   gem 'capybara'
-  # gem 'selenium-webdriver'
+  gem 'selenium-webdriver'
+  gem 'factory_girl_rails'
+  gem 'awesome_print'
+  gem "better_errors"
+  gem "binding_of_caller"
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
