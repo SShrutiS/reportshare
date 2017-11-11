@@ -15,6 +15,13 @@ class ReportsController <ApplicationController
 #         puts row  
 #     end
 
+# @connection = ActiveRecord::Base.connection
+# result = @connection.exec_query('select SLS_PROC_WRK_DT, COMPANY_CODE, sum(WAC) WAC, sum(SDC) SDC, sum(sls_amt) SALES from dbo.SALES_TRENDS  group by SLS_PROC_WRK_DT, COMPANY_CODE order by SLS_PROC_WRK_DT')
+# result.each do |row|
+# puts row
+# # binding.pry
+# end
+
 @sales = Report.all.order('SLS_PROC_WRK_DT DESC')
 @sales = Report.select(:SLS_PROC_WRK_DT,:COMPANY_CODE,"SUM(WAC) AS WAC"  , "SUM(SDC) AS SDC", "SUM(SF) AS SF","SUM(SSF) AS SSF", "SUM(SLS_QTY) AS QTY","SUM(SLS_AMT) AS SALES").group(:SLS_PROC_WRK_DT,:COMPANY_CODE)
         respond_to do |format|

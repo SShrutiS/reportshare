@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @report.name %>
+</p>
+
+<p>
+  <strong>Yrmnth:</strong>
+  <%= @report.yrmnth %>
+</p>
+
+<p>
+  <strong>Azure:</strong>
+  <%= file(@report.azure) %>
+</p>
+
+<p>
+  <strong>Link:</strong>
+  <%= link(@report.link) %>
+</p>
+
+<p>
+  <strong>Approval:</strong>
+  <%= @report.approval %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= @report.comment %>
+</p>
+
+<%= link_to 'Edit', edit_all_report_path(@report) %> |
+<%= link_to 'Back', all_reports_path %>

@@ -1,5 +1,19 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-  <a class="navbar-brand" href="/">Sales Report</a>
+  <%= link_to image_tag("favicon3.ico", alt: "logo"),'/' %>
+<nav class="navbar navbar-expand-md navbar navbar-dark" style="background-color: #005a8c;">
+<head>
+  <style>
+  /* unvisited link */
+  a:link {
+      color: blue;
+  }
+
+  /* visited link */
+  a:visited {
+      color: purple;
+  }
+  </style>
+</head>
+  <a class="navbar-brand" href="/all_reports">GX Sales Reports</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -26,8 +40,18 @@
           <a class="nav-link" href="/all_reports"><i class="fa fa-plus-circle"></i> All Reports</a>
         </li> 
 
+        <li class="nav-item">
+          <a class="nav-link" href="/all_reports/new"><i class="fa fa-plus-circle"></i> Add New Report</a>
+        </li> 
 
       <% elsif @is_user %>
+        <li class="nav-item">
+          <a class="nav-link" href="/reports"><i class="fa fa-plus-circle"></i> Daily Sales Summary</a>
+        </li> 
+
+        <li class="nav-item">
+          <a class="nav-link" href="/all_reports"><i class="fa fa-plus-circle"></i> All Reports</a>
+        </li>
       <% end %>
 
       <% if @is_logged_in %>

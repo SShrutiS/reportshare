@@ -1,0 +1,49 @@
+<%= form_with(model: all_report, local: true , html: {multipart: true}) do |form| %>
+  <% if @report.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(report.errors.count, "error") %> prohibited this report from being saved:</h2>
+
+      <ul>
+      <% report.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :yrmnth %>
+    <%= form.text_field :yrmnth, id: :yrmnth %>
+  </div>
+
+  <div class="field">
+    <%= form.label :file %>
+    <%= form.file_field :file, id: :file %>
+  </div>
+
+  <div class="field">
+    <%= form.label :link %>
+    <%= form.url_field :link, id: :report_link %>
+  </div>  
+  
+  <div class="field">
+    <%= form.label :approval %>
+
+    <%= form.select(:approval, options_for_select(@approval), {}) %>
+  </div>
+
+  
+  <div class="field">
+    <%= form.label :comment %>
+    <%= form.text_field :comment, id: :report_comment %>
+  </div>
+  
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
