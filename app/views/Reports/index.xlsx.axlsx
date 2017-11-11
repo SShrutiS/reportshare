@@ -2,23 +2,34 @@ wb = xlsx_package.workbook
 wb.styles do |style|
   #highlight_row = style.add_style(bg_color: "EFC376")
 
-  wb.add_worksheet(name: "SalesReport") do |sheet|
+  wb.add_worksheet(name: "Daily_Sales_Report") do |sheet|
 
-     sheet.add_row ['SLS_PROC_WRK_DT', 'YR_MNTH', 'PROGRAM', 'COMPANY_CODE', 'WAC', 'SF', 'SSF', 'SDC', 'QTY', 'SALES', 'SOURCE']
-    @sales.each do |sales|
-    sheet.add_row [sales.SLS_PROC_WRK_DT, sales.YR_MNTH, sales.PROGRAM, sales.COMPANY_CODE, sales.WAC, sales.SF, sales.SSF, sales.SDC, sales.QTY, sales.SALES, sales.SOURCE]
+    sheet.add_row ['SLS_PROC_WRK_DT', 'YR_MNTH', 'PROGRAM', 'COMPANY_CODE', 'WAC', 'SF', 'SSF', 'SDC', 'QTY', 'SALES', 'SOURCE']
+   
+    @salessummary.each do |sales|
+                       
+     sheet.add_row [sales.sls_proc_wrk_dt, sales.yr_mnth, sales.program, sales.company_code, sales.wac, sales.sf, sales.ssf, sales.sdc, sales.qty, sales.sales, 'WAREHOUSE']
     end
-     highlight_cell = style.add_style(bg_color: "EFC376",
-                                   border: Axlsx::STYLE_THIN_BORDER,
-                                   alignment: { horizontal: :center })                        
-     
-  end
+   
+    end
+
+  wb.add_worksheet(name: "MSH_Sales_Summary") do |sheet|
+
+    sheet.add_row ['SLS_PROC_WRK_DT', 'COMPANY_CODE', 'WAC', 'SF', 'SSF', 'SDC', 'QTY', 'SALES']
+    
+    @mshslssummary.each do |mshsales|
+                       
+     sheet.add_row [mshsales.sls_proc_wrk_dt, mshsales.company_code, mshsales.wac, mshsales.sf, mshsales.ssf, mshsales.sdc, mshsales.qty, mshsales.sales]
+    end
+    end
+ 
     header_style = wb.styles.add_style :bg_color => "D8D8D8",
                                                    :b => true,
                                                    :border => { :style => :thin, :color => "00" },
                                                    :alignment => { :horizontal => :center,
                                                                    :vertical => :center ,
                                                  :wrap_text => false}
+
     highlight_cell = style.add_style(bg_color: "EFC376",
                                    border: Axlsx::STYLE_THIN_BORDER,
                                    alignment: { horizontal: :center })  

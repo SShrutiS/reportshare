@@ -1,2 +1,37 @@
-<h1>Sales Reports</h1>
-<%= link_to 'Download Sales Report as .xlsx', reports_path(format: :xlsx) %>
+<div>
+</div>
+
+<div>
+</div>
+
+<%= button_to 'Daily Sales Report', reports_path(format: :xlsx), method: :get %>
+
+
+<div class="row no-gutters">
+<div class="col-xs-6">
+  <div class="table-responsive">
+  <table class="table table-striped" width = "50">
+  <thead class="thead-inverse">
+   <tr>
+     <th class="col-xs-1">SLS_PROC_WRK_DT</th>
+     <th class="col-xs-1">SALES</th>
+     <th class="col-xs-1">WAC</th>
+     <th class="col-xs-1">SALES_DIFF</th>
+     <th class="col-xs-1">SALES/WAC</th>
+  </tr>
+ </thead>
+ <tbody>
+   <% @slstrend.each do |r| %>
+     <tr>
+       <td class="col-xs-1"><%= r.SLS_PROC_WRK_DT %></td>
+       <td class="col-xs-1"><%= number_with_delimiter(r.SALES, :delimiter => ',') %></td>
+       <td class="col-xs-1"><%= number_with_delimiter(r.WAC, :delimiter => ',') %></td>
+       <td class="col-xs-1"><%= number_with_delimiter(r.SLS_DIFF, :delimiter => ',') %></td>
+       <td class="col-xs-1"><%= number_to_percentage(r.SALES_TO_WAC , precision: 0) %></td> 
+    </tr>
+     <% end %>
+ </tbody>
+ </table>
+  
+</div>
+</div>
