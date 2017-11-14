@@ -7,6 +7,11 @@ mount Sidekiq::Web => '/sidekiq'
 
   root to: "home#index"
 
+  get '/users', to: 'users#index'
+  get '/users/edit_role', to: 'users#edit_role'
+  put '/users/update_role', to: 'users#update_role'
+
+  
   resources :reports, only: [:index]
 
   resources :all_reports 

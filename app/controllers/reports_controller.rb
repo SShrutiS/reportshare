@@ -18,7 +18,21 @@ class ReportsController <ApplicationController
 
             @slstrend = SalesToWac.all.order('sls_proc_wrk_dt')
          
-          #binding.pry
+          
+            @slstrend.each do |i|
+                # binding.pry
+                if i.SLS_ALERT_FLAG == 'Y' 
+                        flash.now[:notice] = ["Sales Difference "]
+                        flash.now[:notice] << i.SLS_PROC_WRK_DT
+                    # binding.pry
+                end        
+                if i.SLS_WAC_ALERT_FLAG == 'Y'
+                        flash.now[:alert] = ["Sales to Wac ratio"]
+                        flash.now[:alert] << i.SLS_PROC_WRK_DT
+                end   
+        
+            end  
+
 
         respond_to do |format|
             format.html

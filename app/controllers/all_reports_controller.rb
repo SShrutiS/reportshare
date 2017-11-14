@@ -41,6 +41,7 @@ class AllReportsController < ApplicationController
       path = "#{Rails.root}/uploads/#{token}"
       FileUtils.cp file.path, path
       UploadImagesJob.perform_later(name, yrmnth, link, orig, token, path, file.content_type, approval, comment)
+      redirect_to all_reports_path
     else
       @report = AllReport.new(report_params)
 
@@ -54,7 +55,7 @@ class AllReportsController < ApplicationController
       end
     end
     end
-    redirect_to all_reports_path
+    
     return
   end
 

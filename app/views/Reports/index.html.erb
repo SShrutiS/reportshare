@@ -1,34 +1,50 @@
-<div>
-</div>
-
-<div>
-</div>
-
-<%= button_to 'Daily Sales Report', reports_path(format: :xlsx), method: :get %>
+<%= button_to 'Download Daily Sales Details', reports_path(format: :xlsx), method: :get,  class: "btn btn-outline-primary m-4" %>
 
 
 <div class="row no-gutters">
 <div class="col-xs-6">
   <div class="table-responsive">
+
+  <head>
+  <style>
+  th, td {
+      text-align: left;
+      font-family: "Arial", Arial, sans-serif;
+      font-weight: normal;
+      font-size: 14px;
+      border-bottom: 1px solid #ddd;
+  }
+    </style>
+</head>
   <table class="table table-striped" width = "50">
   <thead class="thead-inverse">
    <tr>
-     <th class="col-xs-1">SLS_PROC_WRK_DT</th>
-     <th class="col-xs-1">SALES</th>
-     <th class="col-xs-1">WAC</th>
-     <th class="col-xs-1">SALES_DIFF</th>
-     <th class="col-xs-1">SALES/WAC</th>
+     <th class="col-xs-1" style="background-color:#023B5A">SLS PROC WRK DT</th>
+     <th class="col-xs-1" style="background-color:#023B5A">SALES</th>
+     <th class="col-xs-1" style="background-color:#023B5A">WAC</th>
+     <th class="col-xs-1" style="background-color:#023B5A">SALES DIFF FROM PRIOR DAY</th>
+     <th class="col-xs-1" style="background-color:#023B5A">SALES/WAC</th>
   </tr>
  </thead>
  <tbody>
    <% @slstrend.each do |r| %>
-     <tr>
+     <% if r.SLS_ALERT_FLAG == 'Y' || r.SLS_WAC_ALERT_FLAG == 'Y' %>
+     <tr class="p-3 mb-2 bg-danger text-white">
        <td class="col-xs-1"><%= r.SLS_PROC_WRK_DT %></td>
-       <td class="col-xs-1"><%= number_with_delimiter(r.SALES, :delimiter => ',') %></td>
-       <td class="col-xs-1"><%= number_with_delimiter(r.WAC, :delimiter => ',') %></td>
-       <td class="col-xs-1"><%= number_with_delimiter(r.SLS_DIFF, :delimiter => ',') %></td>
+       <td class="col-xs-1"><%= number_to_currency(r.SALES) %></td>
+       <td class="col-xs-1"><%= number_to_currency(r.WAC) %></td>
+       <td class="col-xs-1"><%= number_to_currency(r.SLS_DIFF) %></td>
        <td class="col-xs-1"><%= number_to_percentage(r.SALES_TO_WAC , precision: 0) %></td> 
     </tr>
+    <% else %>
+    <tr>
+       <td class="col-xs-1"><%= r.SLS_PROC_WRK_DT %></td>
+       <td class="col-xs-1"><%= number_to_currency(r.SALES) %></td>
+       <td class="col-xs-1"><%= number_to_currency(r.WAC) %></td>
+       <td class="col-xs-1"><%= number_to_currency(r.SLS_DIFF) %></td>
+       <td class="col-xs-1"><%= number_to_percentage(r.SALES_TO_WAC , precision: 0) %></td> 
+    </tr>
+     <% end %>
      <% end %>
  </tbody>
  </table>

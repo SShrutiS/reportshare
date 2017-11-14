@@ -1,51 +1,61 @@
 <p id="notice"><%= notice %></p>
 
-<%= link_to 'Add New Report', new_all_report_path, class: "btn btn-outline-primary m-4" %>
-
 <head>
   <style>
   table {
+
       border-collapse: collapse;
       width: 100%;
+      overflow:auto;
   }
 
   th, td {
       padding: 8px;
       text-align: left;
+      width: 10px;
+      vertical-align: top;
+      font-family: "Arial", Arial, sans-serif;
+      font-weight: normal;
+      font-size: 14px;
+      color:#005a8c;
       border-bottom: 1px solid #ddd;
   }
 
+  tr {
+    height: 4px;
+  }
   tr:hover{background-color:#AED6F1}
   </style>
 </head>
 
 <h2 class="display-8 p-0"  style="color:#161D3E" >List of Reports</h2>
 
-<table class="table table-striped"> 
-  <thead class="thead-inverse">
+<table class="table table-striped" "table table-condensed"> 
+  <thead class="thead-inverse" style="color:#005a8c">
     <tr>
-      <th style="background-color:#005a8c" "font-size:40px">Name</th>
-      <th style="background-color:#005a8c">Report Period</th>
-      <th style="background-color:#005a8c">File</th>
-      <th style="background-color:#005a8c">Link</th>
-      <th style="background-color:#005a8c">Approval</th>
-      <th style="background-color:#005a8c">Comments</th>
-      <th style="background-color:#005a8c" colspan="3"></th>
+      <th style="background-color:#023B5A" style="color:#005a8c">REPORT NAME</th>
+      <th style="background-color:#023B5A">YR MNTH</th>
+      <th style="background-color:#023B5A">FILE</th>
+      <th style="background-color:#023B5A">LINK</th>
+      <th style="background-color:#023B5A">APPROVAL</th>
+      <th style="background-color:#023B5A">COMMENTS</th>
+      <th style="background-color:#023B5A" colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @reports.each do |report| %>
       <tr>
-        <td><%= report.name %></td>
+        <td><%= link_to report.name, report %></td>
         <td><%= report.yrmnth %></td>
         <td><%= file(report.azure) %></td>
         <td><%= link(report.link) %></td>
         <td><%= report.approval %></td>
         <td><%= report.comment %></td>
-        <td><%= link_to 'Show', report %></td>
         <td><%= link_to 'Edit', edit_all_report_path(report) %></td>
-        <td><%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><% if @user.role == 'admin' %><%= link_to 'Delete', report, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <% else %> <%= '' %> <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
